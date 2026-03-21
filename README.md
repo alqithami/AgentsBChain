@@ -20,9 +20,17 @@ The configs directory contains YAML examples illustrating how the concepts discu
 - **`active-trading-agent.yaml`**: Prioritizes performance and responsiveness, suitable for strategies requiring rapid execution (L2 Conformance).
 - **`governance-agent.yaml`**: Manages voting and delegation across multiple DAOs with specialized policy controls.
 
+### 3. Implementation Examples (`/examples`)
+
+Detailed implementation walkthroughs for each integration pattern identified in the survey, including architecture descriptions, sample payloads, execution flows, and security analysis:
+
+- **`pattern-iii-payment-agent.md`**: Simple recurring payment agent using ERC-4337 smart accounts with session keys and on-chain policy enforcement (Pattern III: Delegated Execution).
+- **`pattern-iv-rebalancing-agent.md`**: Autonomous portfolio rebalancing agent using MPC custody, off-chain policy engines, and the TIS/PDR workflow (Pattern IV: Autonomous Signing).
+- **`pattern-v-dao-treasury.md`**: Multi-agent DAO treasury management pipeline with specialized strategy, risk, and execution agents (Pattern V: Multi-Agent Workflows).
+
 ## Usage
 
-These schemas and configurations are provided as reference architectures for researchers and practitioners building autonomous agents that interact with blockchain networks. They are designed to be modular, extensible, and chain-agnostic.
+These schemas, configurations, and examples are provided as reference architectures for researchers and practitioners building autonomous agents that interact with blockchain networks. They are designed to be modular, extensible, and chain-agnostic.
 
 ## Citation
 
