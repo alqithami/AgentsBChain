@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/alqithami/AgentsBChain/schemas/pdr-schema.json",
+  "title": "Policy Decision Record (PDR)",
+  "description": "A signed policy attestation regarding a specific Transaction Intent (TIS). The PDR binds (i) the evaluated intent hash, (ii) the decision outcome, and (iii) any constraints imposed by the policy engine. Proposed in: 'Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries' (Alqithami, 2026).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string", "pattern": "^1\\.0\\.0$" },
+    "pdrId": { "type": "string", "format": "uuid" },
+    "issuer": { "type": "string", "description": "Identifier for the policy engine (e.g., DID, ENS, URL)." },
+    "subject": { "type": "string", "description": "Account or user on whose behalf the intent is being evaluated." },
+    "audience": { "type": "string", "description": "Intended verifier, typically the signer service identifier." },
+    "issuedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "tisHash": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{64}$",
+      "description": "keccak256 hash of the canonicalized TIS object."
+    },
+    "decision": { "$ref": "#/definitions/Decision" },
+    "policyEngineSignature": { "$ref": "#/definitions/Signature" }
+  },
+  "required": ["version", "pdrId", "issuer", "audience", "issuedAt", "expiresAt", "tisHash", "decision", "policyEngineSignature"],
+  "definitions": {
+
+    "Address": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+
+    "UintString": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+
+    "Modification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "description": "JSON Pointer path into the TIS object (RFC 6901)." },
+        "operation": { "type": "string", "enum": ["ADD", "REPLACE", "REMOVE"] },
+        "value": { "type": ["string", "number", "object", "array", "boolean", "null"] }
+      },
+      "required": ["path", "operation"]
+    },
+
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "outcome": { "type": "string", "enum": ["APPROVED", "REJECTED"] },
+        "policyId": { "type": "string", "description": "Identifier for the applied policy bundle or ruleset version." },
+        "reason": { "type": "string", "description": "Human-readable decision rationale, important for REJECTED." },
+        "riskScore": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "boundConstraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxGasPriceWei": { "$ref": "#/definitions/UintString" },
+            "maxValueWei": { "$ref": "#/definitions/UintString" },
+            "tightDeadline": { "type": "integer", "minimum": 0, "description": "Optional reduced Unix deadline." }
+          }
+        },
+        "modifiedParameters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Modification" }
+        }
+      },
+      "required": ["outcome", "policyId"]
+    },
+
+    "Signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "signer": { "$ref": "#/definitions/Address", "description": "Address of the policy engine signing key." },
+        "alg": { "type": "string", "description": "Signature algorithm identifier (e.g., ES256K)." },
+        "signature": { "type": "string", "pattern": "^0x[a-fA-F0-9]+$" }
+      },
+      "required": ["signer", "signature"]
+    }
+
+  }
+}

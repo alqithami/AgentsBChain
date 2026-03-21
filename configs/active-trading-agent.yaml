@@ -1,0 +1,37 @@
+# Configuration 2: Active Trading Agent
+# An active trading agent prioritizes performance and responsiveness,
+# suitable for strategies requiring rapid execution.
+
+agent_config:
+  name: "active_trading_agent"
+  version: "1.0.0"
+
+  custody:
+    type: "mpc_wallet"
+    implementation: "turnkey"
+    threshold: "2-of-3"
+    latency_optimized: true
+
+  policy:
+    max_transaction_value: "100000 USD"
+    position_limits:
+      max_single_position: "25%"
+      max_protocol_exposure: "40%"
+    allowed_protocols: "all_audited"
+    risk_parameters:
+      max_drawdown: "10%"
+      var_limit: "5%"
+
+  execution:
+    simulation_required: false
+    latency_target: "100ms"
+    mev_protection: "private_mempool"
+    max_slippage: "2%"
+    retry_policy:
+      max_retries: 3
+      backoff: "exponential"
+
+  monitoring:
+    real_time_pnl: true
+    position_tracking: true
+    automatic_rebalancing: true

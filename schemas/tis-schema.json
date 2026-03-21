@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/alqithami/AgentsBChain/schemas/tis-schema.json",
+  "title": "Transaction Intent Schema (TIS)",
+  "description": "A chain-agnostic schema for expressing desired outcomes and constraints for on-chain execution. Proposed in: 'Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries' (Alqithami, 2026).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string", "pattern": "^1\\.0\\.0$" },
+    "intentId": { "type": "string", "format": "uuid" },
+    "metadata": { "$ref": "#/definitions/Metadata" },
+    "action": { "$ref": "#/definitions/Action" },
+    "constraints": { "$ref": "#/definitions/Constraints" },
+    "preferences": { "$ref": "#/definitions/Preferences" }
+  },
+  "required": ["version", "intentId", "action", "constraints"],
+  "definitions": {
+
+    "Address": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+
+    "HexBytes": {
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]*$"
+    },
+
+    "UintString": {
+      "type": "string",
+      "pattern": "^[0-9]+$",
+      "description": "Unsigned integer serialized as a base-10 string."
+    },
+
+    "Token": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "chainId": { "type": "integer", "minimum": 1 },
+        "address": { "$ref": "#/definitions/Address" },
+        "symbol": { "type": "string" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 255 }
+      },
+      "required": ["chainId", "address"]
+    },
+
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "originator": { "type": "string", "description": "Identifier for the user, agent, or client that created the intent." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "originChainId": { "type": "integer", "minimum": 1 },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "Constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "nonce": { "$ref": "#/definitions/UintString" },
+        "deadline": { "type": "integer", "minimum": 0, "description": "Unix timestamp seconds." },
+        "validFromBlock": { "type": "integer", "minimum": 0 },
+        "validUntilBlock": { "type": "integer", "minimum": 0 },
+        "maxGasPriceWei": { "$ref": "#/definitions/UintString" },
+        "requiredSigner": { "$ref": "#/definitions/Address" },
+        "exclusivity": {
+          "type": ["string", "null"],
+          "pattern": "^0x[a-fA-F0-9]{40}$",
+          "description": "Optional solver/builder address granted exclusive execution rights during the validity window."
+        }
+      },
+      "required": ["deadline"]
+    },
+
+    "Preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "privacyMode": { "type": "string", "enum": ["PUBLIC", "PRIVATE"] },
+        "executionSpeed": { "type": "string", "enum": ["FAST", "NORMAL", "SLOW"] },
+        "routing": {
+          "type": "string",
+          "enum": ["BEST_PRICE", "MIN_GAS", "MIN_RISK"],
+          "description": "Optional routing preference communicated to solvers."
+        }
+      }
+    },
+
+    "Action": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/definitions/actions/Swap" },
+        { "$ref": "#/definitions/actions/Transfer" },
+        { "$ref": "#/definitions/actions/Delegate" }
+      ]
+    },
+
+    "actions": {
+
+      "Swap": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": { "const": "SWAP" },
+          "tokenIn": { "$ref": "#/definitions/Token" },
+          "tokenOut": { "$ref": "#/definitions/Token" },
+          "amountIn": { "$ref": "#/definitions/UintString" },
+          "minAmountOut": { "$ref": "#/definitions/UintString" },
+          "slippageBps": { "type": "integer", "minimum": 0, "maximum": 10000 },
+          "recipient": { "$ref": "#/definitions/Address" }
+        },
+        "required": ["type", "tokenIn", "tokenOut", "amountIn", "minAmountOut"]
+      },
+
+      "Transfer": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": { "const": "TRANSFER" },
+          "token": { "$ref": "#/definitions/Token" },
+          "to": { "$ref": "#/definitions/Address" },
+          "amount": { "$ref": "#/definitions/UintString" },
+          "memo": { "type": "string" }
+        },
+        "required": ["type", "token", "to", "amount"]
+      },
+
+      "Delegate": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": { "const": "DELEGATE" },
+          "delegatee": { "$ref": "#/definitions/Address" },
+          "scope": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "contracts": { "type": "array", "items": { "$ref": "#/definitions/Address" } },
+              "functions": { "type": "array", "items": { "type": "string" } },
+              "maxValueWei": { "$ref": "#/definitions/UintString" },
+              "validUntil": { "type": "integer", "minimum": 0, "description": "Unix timestamp seconds." }
+            }
+          }
+        },
+        "required": ["type", "delegatee", "scope"]
+      }
+
+    }
+  }
+}
