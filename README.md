@@ -1,6 +1,6 @@
 # Agents on Blockchains: Reference Implementations
 
-This repository contains the reference implementations and sample configurations for the systematic literature review: **"Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries"** (Alqithami, 2026).
+This repository contains the reference implementations and configurations for the systematic literature review: **"Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries"** (Alqithami, 2026).
 
 ## Contents
 
@@ -37,10 +37,13 @@ These schemas, configurations, and examples are provided as reference architectu
 If you use these reference implementations in your research or systems, please cite the accompanying paper:
 
 ```bibtex
-@article{alqithami2026agents,
-  title={Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries},
-  author={Alqithami, S.},
-  journal={TBD},
-  year={2026}
+@misc{alqithami2026agents,
+      title={Autonomous Agents on Blockchains: Standards, Execution Models, and Trust Boundaries}, 
+      author={Saad Alqithami},
+      year={2026},
+      eprint={2601.04583},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2601.04583}, 
 }
 ```
