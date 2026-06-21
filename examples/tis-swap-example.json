@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "intentId": "11111111-1111-4111-8111-111111111111",
+  "metadata": {
+    "originator": "example-defi-agent",
+    "createdAt": "2026-03-21T00:00:00Z",
+    "originChainId": 1,
+    "tags": ["example", "swap", "tis"]
+  },
+  "action": {
+    "type": "SWAP",
+    "tokenIn": {
+      "chainId": 1,
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "symbol": "USDC",
+      "decimals": 6
+    },
+    "tokenOut": {
+      "chainId": 1,
+      "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "symbol": "WETH",
+      "decimals": 18
+    },
+    "amountIn": "100000000",
+    "minAmountOut": "25000000000000000",
+    "slippageBps": 50,
+    "recipient": "0x000000000000000000000000000000000000dEaD"
+  },
+  "constraints": {
+    "nonce": "1",
+    "deadline": 1774051200,
+    "maxGasPriceWei": "50000000000",
+    "requiredSigner": "0x000000000000000000000000000000000000dEaD"
+  },
+  "preferences": {
+    "privacyMode": "PRIVATE",
+    "executionSpeed": "NORMAL",
+    "routing": "MIN_RISK"
+  }
+}
