@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "pdrId": "22222222-2222-4222-8222-222222222222",
+  "issuer": "did:web:policy.example.org",
+  "subject": "0x000000000000000000000000000000000000dEaD",
+  "audience": "mpc-signer-prod-1",
+  "issuedAt": "2026-03-21T00:01:00Z",
+  "expiresAt": "2026-03-21T00:06:00Z",
+  "tisHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "decision": {
+    "outcome": "APPROVED",
+    "policyId": "defi-policy-v1.0.0",
+    "reason": "Intent satisfies allowlist, value, deadline, and MEV-protection constraints.",
+    "riskScore": 0.21,
+    "boundConstraints": {
+      "maxGasPriceWei": "50000000000",
+      "maxValueWei": "100000000"
+    }
+  },
+  "policyEngineSignature": {
+    "signer": "0x000000000000000000000000000000000000bEEF",
+    "alg": "ES256K",
+    "signature": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  }
+}
